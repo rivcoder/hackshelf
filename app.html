@@ -22,22 +22,28 @@
   <header class="top">
     <a class="logo" href="index.html"><img src="img/logo.png" alt="Hackshelf Logo" class="brand-icon">Hack<i>shelf</i></a>
     <div class="top-actions">
-      <button class="btn ghost btn-sm" id="bookmarkletBtn" type="button" title="Desktop quick capture bookmarklet">+ Bookmarklet</button>
-      <button class="btn ghost btn-sm" id="installBtn" type="button" hidden title="Install Hackshelf as app">Install App</button>
-      <button class="btn ghost btn-sm" id="exportBtn" type="button" title="Export backup JSON">Export</button>
-      <button class="btn ghost btn-sm" id="importBtn" type="button" title="Import backup JSON">Import</button>
+      <div class="btn-group" role="toolbar" aria-label="Quick actions">
+        <button class="btn-icon" id="bookmarkletBtn" type="button" title="Capture from any browser page"><span>📌</span> Bookmarklet</button>
+        <button class="btn-icon" id="installBtn" type="button" hidden title="Install Hackshelf app"><span>📲</span> Install</button>
+        <button class="btn-icon" id="exportBtn" type="button" title="Export backup JSON"><span>📥</span> Export</button>
+        <button class="btn-icon" id="importBtn" type="button" title="Import backup JSON"><span>📤</span> Import</button>
+      </div>
       <input type="file" id="importFile" accept="application/json" style="display:none">
-      <button class="btn" id="addBtn" type="button">Add hackathon</button>
+      <button class="btn btn-primary-add" id="addBtn" type="button"><span>+</span> Add hackathon</button>
     </div>
   </header>
 
   <main>
     <div class="bar">
-      <input id="q" type="search" placeholder="Search (press / to focus)" aria-label="Search">
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input id="q" type="search" placeholder="Search hackathons, notes, or tags" aria-label="Search">
+        <kbd class="kbd-hint">/</kbd>
+      </div>
       <div class="filters">
         <select id="fStatus" aria-label="Filter by status"></select>
         <select id="fPlatform" aria-label="Filter by platform"></select>
-        <label class="chk"><input type="checkbox" id="fSoon"> Closing this week</label>
+        <label class="chk-pill" id="soonPill"><input type="checkbox" id="fSoon"> Closing this week</label>
       </div>
     </div>
     <p class="summary" id="summary" aria-live="polite"></p>

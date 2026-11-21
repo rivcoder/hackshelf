@@ -148,8 +148,14 @@ function row(i) {
   const unit = d < 0 ? 'ago' : d === 0 ? 'today' : d === 1 ? 'day' : 'days';
   const url = safeUrl(i.url);
   const chat = safeUrl(i.team_chat);
-  const meta = [fmtDate(i.deadline), i.platform, i.mode, i.prize && 'Prize: ' + i.prize].filter(Boolean).map(t => el('span', {}, t));
-  if (i.team_members) meta.push(el('span', {}, 'Team: ' + i.team_members));
+  const platformClass = i.platform ? 'platform-badge platform-' + i.platform : 'platform-badge';
+  const meta = [
+    el('span', {}, fmtDate(i.deadline)),
+    i.platform ? el('span', { class: platformClass }, i.platform) : null,
+    i.mode ? el('span', {}, i.mode) : null,
+    i.prize ? el('span', {}, '🏆 Prize: ' + i.prize) : null
+  ].filter(Boolean);
+  if (i.team_members) meta.push(el('span', {}, '👥 Team: ' + i.team_members));
   if (chat) meta.push(el('a', { href: chat, target: '_blank', rel: 'noopener noreferrer', class: 'chat-link' }, '💬 Team chat'));
   
   const sel = el('select', {
@@ -188,9 +194,10 @@ function render() {
 
   if (!all.length) {
     list.append(el('li', { class: 'empty' },
+      el('div', { class: 'empty-badge' }, el('img', { src: 'img/logo.png', alt: 'Shelf', class: 'empty-logo' })),
       el('h2', {}, 'Your shelf is empty'),
-      el('p', {}, 'Found a hackathon worth doing? Paste its link and add the deadline.'),
-      el('button', { class: 'btn', type: 'button', onclick: () => openDialog() }, 'Add your first hackathon')));
+      el('p', {}, 'Found a hackathon worth building for? Drop the link here and never let a deadline slip by.'),
+      el('button', { class: 'btn btn-primary-add', type: 'button', onclick: () => openDialog() }, el('span', {}, '+'), 'Add your first hackathon')));
   } else if (!shown.length) {
     list.append(el('li', { class: 'empty' },
       el('h2', {}, 'Nothing matches'),
@@ -383,7 +390,12 @@ $('#addBtn').addEventListener('click', () => openDialog());
 $('#q').addEventListener('input', e => { state.q = e.target.value.trim().toLowerCase(); render(); });
 $('#fStatus').addEventListener('change', e => { state.status = e.target.value; render(); });
 $('#fPlatform').addEventListener('change', e => { state.platform = e.target.value; render(); });
-$('#fSoon').addEventListener('change', e => { state.soon = e.target.checked; render(); });
+$('#fSoon').addEventListener('change', e => {
+  state.soon = e.target.checked;
+  const pill = $('#soonPill');
+  if (pill) pill.classList.toggle('active', e.target.checked);
+  render();
+});
 
 // quick deadline buttons
 const pad = n => String(n).padStart(2, '0');
