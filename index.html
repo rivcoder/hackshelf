@@ -20,7 +20,10 @@
 <body>
 <nav class="nav" id="nav" aria-label="Main">
   <div class="nav-in">
-    <a class="logo" href="#top"><img src="img/logo.png" alt="Hackshelf Logo" class="brand-icon">Hack<i>shelf</i></a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a class="logo" href="#top"><img src="img/logo.png" alt="Hackshelf Logo" class="brand-icon">Hack<i>shelf</i></a>
+      <a class="by-badge" href="https://kaushift.com" target="_blank" rel="noopener noreferrer" title="Visit Kaushift Community">by Kaushift ↗</a>
+    </div>
     <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
     <div class="menu" id="menu">
       <a href="#what">What it is</a>
@@ -86,13 +89,26 @@
       </ul>
     </section>
 
+    <section class="section" id="community" style="text-align:center;padding:72px 0 60px">
+      <div style="max-width:620px;margin:0 auto">
+        <span class="by-badge" style="margin-bottom:16px;font-size:0.8rem;padding:4px 14px">Community Spotlight</span>
+        <h2 style="margin-bottom:16px;font-size:clamp(2rem,5vw,3rem)">Need teammates for your next hackathon?</h2>
+        <p style="color:var(--muted);font-size:1.1rem;line-height:1.6;margin-bottom:28px">
+          Hackshelf tracks your deadlines. <strong>Kaushift</strong> connects the builders. Join the Kaushift community platform to find co-founders, form hackathon squads, share project feedback, and build together.
+        </p>
+        <a class="btn" href="https://kaushift.com" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px">
+          Explore Kaushift Community <span>↗</span>
+        </a>
+      </div>
+    </section>
+
     <section class="cta">
       <h2>Your next deadline is already out there.</h2>
       <a class="btn" href="app.html">Try it now</a>
     </section>
   </main>
 
-  <footer>Hackshelf is a student project. <a href="app.html">Open the app</a> &bull; <a href="privacy.html">Privacy Policy</a></footer>
+  <footer>A side project by <a href="https://kaushift.com" target="_blank" rel="noopener noreferrer" style="color:var(--ink);font-weight:600">Kaushift</a> &bull; <a href="app.html">Open the app</a> &bull; <a href="privacy.html">Privacy Policy</a></footer>
 </div>
 <script src="js/landing.js"></script>
 <script src="js/fx.js"></script>
