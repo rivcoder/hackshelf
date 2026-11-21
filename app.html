@@ -22,6 +22,7 @@
   <header class="top">
     <a class="logo" href="index.html"><img src="img/logo.png" alt="Hackshelf Logo" class="brand-icon">Hack<i>shelf</i></a>
     <div class="top-actions">
+      <button class="btn ghost btn-sm" id="bookmarkletBtn" type="button" title="Desktop quick capture bookmarklet">+ Bookmarklet</button>
       <button class="btn ghost btn-sm" id="installBtn" type="button" hidden title="Install Hackshelf as app">Install App</button>
       <button class="btn ghost btn-sm" id="exportBtn" type="button" title="Export backup JSON">Export</button>
       <button class="btn ghost btn-sm" id="importBtn" type="button" title="Import backup JSON">Import</button>
@@ -79,6 +80,23 @@
     </div>
   </form>
 </dialog>
+
+<dialog id="bmDlg">
+  <div style="padding:4px">
+    <h2>Save to Hackshelf from anywhere</h2>
+    <p style="color:var(--muted);margin:8px 0 18px">Drag this button to your browser's bookmarks bar. Whenever you are browsing Devfolio, Devpost, or Unstop, click the bookmark to automatically save the hackathon to your shelf.</p>
+    <div style="text-align:center;padding:24px 16px;background:var(--bg);border-radius:10px;margin-bottom:20px;border:1px dashed var(--line)">
+      <a class="btn" id="bmLink" href="#" style="cursor:grab;display:inline-flex;align-items:center;gap:8px" title="Drag this to your bookmarks bar">
+        <span>📌</span> Save to Hackshelf
+      </a>
+      <p style="font-size:0.85rem;color:var(--muted);margin:12px 0 0">👆 Drag me to your Bookmarks Bar (Ctrl+Shift+B / Cmd+Shift+B)</p>
+    </div>
+    <div class="dlg-acts">
+      <button class="btn ghost" type="button" id="bmClose">Close</button>
+    </div>
+  </div>
+</dialog>
+
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="js/app.js"></script>
 <script src="js/fx.js"></script>

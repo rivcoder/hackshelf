@@ -345,6 +345,26 @@ if (importFileInput) {
 }
 
 /* ---------- Init ---------- */
+const bmBtn = $('#bookmarkletBtn');
+const bmDlg = $('#bmDlg');
+const bmClose = $('#bmClose');
+const bmLink = $('#bmLink');
+
+if (bmBtn && bmDlg) {
+  // Construct bookmarklet URL dynamically based on current origin/path
+  const appUrl = window.location.href.split('?')[0];
+  const bmCode = "javascript:(function(){var u=encodeURIComponent(location.href);var t=encodeURIComponent(document.title.replace(/\\s*[-|•].*$/,'').trim());window.open('" + appUrl + "?url='+u+'&name='+t,'_blank');})();";
+  if (bmLink) {
+    bmLink.setAttribute('href', bmCode);
+    bmLink.addEventListener('click', e => {
+      e.preventDefault();
+      toast('Drag this button directly to your bookmarks bar!');
+    });
+  }
+  bmBtn.addEventListener('click', () => bmDlg.showModal());
+  if (bmClose) bmClose.addEventListener('click', () => bmDlg.close());
+}
+
 function fillSelect(sel, opts, firstLabel) {
   sel.replaceChildren(...(firstLabel ? [el('option', { value: '' }, firstLabel)] : []), ...opts.map(([v, l]) => el('option', { value: v }, l)));
 }
