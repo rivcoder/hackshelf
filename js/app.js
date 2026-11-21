@@ -35,8 +35,11 @@ const store = {
   async _save(items) {
     try {
       localStorage.setItem(NEW_KEY, JSON.stringify(items));
-    } catch {
-      throw new Error('Could not save. Your browser storage may be full or blocked.');
+    } catch (e) {
+      if (e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014)) {
+        throw new Error('Storage is full. Please use Export to back up, then delete past hackathons.');
+      }
+      throw new Error('Could not save. Your browser storage may be blocked or restricted in private mode.');
     }
   },
   async add(item) {
@@ -393,6 +396,14 @@ document.addEventListener('keydown', e => {
   if (dlg.open || e.metaKey || e.ctrlKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
   if (e.key === '/') { e.preventDefault(); $('#q').focus(); }
   else if (e.key === 'n') { e.preventDefault(); openDialog(); }
+});
+
+// Network status listeners
+window.addEventListener('offline', () => {
+  toast('You are offline. Hackshelf continues to save your work locally.');
+});
+window.addEventListener('online', () => {
+  toast('Internet connection restored.');
 });
 
 load().then(() => {

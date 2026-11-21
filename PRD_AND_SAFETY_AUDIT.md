@@ -81,6 +81,18 @@ Each module is analyzed through 3 distinct angles:
 
 ---
 
+### Module 6: Network & Error Boundaries
+- **Files**: `js/app.js` (`window.addEventListener('online'/'offline')`, storage error handling)
+- **What it does**: Detects internet connectivity drops and gives non-intrusive feedback; isolates storage quota exhaustion and privacy mode restrictions.
+
+| Verification Angle | Finding & Audit Result | Status |
+| :--- | :--- | :--- |
+| **Angle A: Data Integrity** | Zero data loss during disconnects because v1 writes synchronously to local browser storage first. | **Completely Safe** |
+| **Angle B: Cross-Platform** | Uses standard DOM Level 2 network events supported across all browsers. | **Completely Safe** |
+| **Angle C: Security/Failure** | Distinguishes `QuotaExceededError` (error codes 22/1014) from permission errors, providing actionable recovery instructions to export backup before deletion. | **Completely Safe** |
+
+---
+
 ## 3. Edge-Case Breakdown Protections Added
 
 1. **`crypto.randomUUID()` Fallback (`genId()`)**: Prevents uncaught exceptions on older browsers, mobile webviews, or non-secure local IP testing.
