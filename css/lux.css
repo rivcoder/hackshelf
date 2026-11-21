@@ -97,17 +97,17 @@ p{text-wrap:pretty}
 [data-reveal].in{animation:up 1.2s var(--ease) backwards;animation-delay:calc(var(--d,0)*120ms)}
 
 /* app */
-.bar input,.bar select,dialog input,dialog select,dialog textarea{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;transition:border-color .4s,box-shadow .4s}
-.bar input:focus,.bar select:focus,dialog input:focus,dialog select:focus,dialog textarea:focus{outline:none;border-color:var(--lit);box-shadow:0 0 0 3px rgba(229,86,92,.18)}
+.bar input,.bar select,dialog input,dialog select,dialog textarea{background:rgba(242,232,225,.03);color:var(--ink);border:1px solid rgba(242,232,225,.07);border-radius:12px;transition:border-color .3s,box-shadow .3s,background .3s}
+.bar input:focus,.bar select:focus,dialog input:focus,dialog select:focus,dialog textarea:focus{outline:none;border-color:rgba(229,86,92,.45);background:rgba(242,232,225,.05);box-shadow:0 0 0 3px rgba(229,86,92,.12)}
 ::placeholder{color:#7D6B61}
-option{background:var(--surface);color:var(--ink)}
-.row,.empty{background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:10px;transition:box-shadow .6s var(--ease),transform .6s var(--ease)}
-.row:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(242,232,225,.28),0 20px 40px -24px #000}
-.row.past{opacity:.55}
+option{background:#1F110C;color:var(--ink)}
+.row,.empty{background:transparent;box-shadow:none;border-radius:24px;transition:box-shadow .4s var(--ease),transform .4s var(--ease)}
+.row:hover{transform:translateY(-2px);box-shadow:0 16px 36px -16px rgba(0,0,0,.6)}
+.row.past{opacity:.5}
 .boot .row{animation:up 1s var(--ease) backwards;animation-delay:calc(var(--i,0)*80ms)}
 .row:nth-child(1){--i:0}.row:nth-child(2){--i:1}.row:nth-child(3){--i:2}.row:nth-child(4){--i:3}.row:nth-child(5){--i:4}.row:nth-child(6){--i:5}
-.icon,.acts select{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:8px;transition:border-color .4s}
-.icon:hover{border-color:var(--ink)}
+.icon,.acts select{background:transparent;color:var(--ink);border:1px solid rgba(242,232,225,.08);border-radius:10px;transition:border-color .3s,background .3s}
+.icon:hover{border-color:rgba(242,232,225,.2);background:rgba(242,232,225,.04)}
 .chk,.summary{color:var(--muted)}.chk{color:var(--ink)}
 .err{color:var(--lit)}
 dialog{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:0 40px 100px -30px #000}
