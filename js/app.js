@@ -150,7 +150,7 @@ function row(i) {
   const chat = safeUrl(i.team_chat);
   const meta = [fmtDate(i.deadline), i.platform, i.mode, i.prize && 'Prize: ' + i.prize].filter(Boolean).map(t => el('span', {}, t));
   if (i.team_members) meta.push(el('span', {}, 'Team: ' + i.team_members));
-  if (chat) meta.push(el('a', { href: chat, target: '_blank', rel: 'noopener noreferrer' }, 'Team chat'));
+  if (chat) meta.push(el('a', { href: chat, target: '_blank', rel: 'noopener noreferrer', class: 'chat-link' }, '💬 Team chat'));
   
   const sel = el('select', {
     'aria-label': 'Status for ' + i.name,
@@ -201,8 +201,11 @@ function render() {
   }
 
   const soonCount = all.filter(i => { const d = daysLeft(i.deadline); return d >= 0 && d <= 7; }).length;
+  const isFiltered = Boolean(state.q || state.status || state.platform || state.soon);
   $('#summary').textContent = all.length
-    ? `${all.filter(i => daysLeft(i.deadline) >= 0).length} upcoming, ${soonCount} closing this week` : '';
+    ? `${all.filter(i => daysLeft(i.deadline) >= 0).length} upcoming, ${soonCount} closing this week` +
+      (isFiltered ? ` · Showing ${shown.length} of ${all.length}` : '')
+    : '';
 
   const arch = $('#archive');
   $('#archiveList').replaceChildren(...past.map(row));

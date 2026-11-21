@@ -11,6 +11,8 @@
 .row .name{font:600 1.05rem var(--body);text-decoration:none;word-break:break-word}
 a.name:hover{text-decoration:underline}
 .meta{color:var(--muted);font-size:.9rem;display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
+.chat-link{color:var(--lit);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.chat-link:hover{text-decoration:underline}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{background:#EEF0F8;border-radius:99px;padding:2px 10px;font-size:.8rem}
 .acts{grid-column:1/-1;display:flex;gap:8px;align-items:center}
