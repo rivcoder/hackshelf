@@ -4,6 +4,11 @@
 const STATUSES = [['interested','Interested'],['registered','Registered'],['team','Team formed'],['submitted','Submitted'],['result','Result']];
 const PLATFORMS = ['Devfolio','Unstop','Devpost','MLH','Other'];
 
+// Robust UUID generator with fallback for older browsers or non-secure contexts
+const genId = () => (typeof crypto !== 'undefined' && crypto.randomUUID)
+  ? crypto.randomUUID()
+  : 'hs-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 9);
+
 /* ---------- Storage layer ----------
    Everything the UI needs goes through these async methods.
    Supports backward migration from old key if exists. */
@@ -36,7 +41,7 @@ const store = {
   },
   async add(item) {
     const items = await this.list();
-    const row = { id: crypto.randomUUID(), created_at: new Date().toISOString(), ...item };
+    const row = { id: genId(), created_at: new Date().toISOString(), ...item };
     items.push(row);
     await this._save(items);
     return row;
@@ -60,7 +65,7 @@ const store = {
     for (const item of newItems) {
       if (item && item.name && item.deadline) {
         if (!item.id || existingIds.has(item.id)) {
-          item.id = crypto.randomUUID();
+          item.id = genId();
         }
         merged.push(item);
       }

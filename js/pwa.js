@@ -2,8 +2,8 @@
 (() => {
   'use strict';
 
-  // 1. Register Service Worker
-  if ('serviceWorker' in navigator) {
+  // 1. Register Service Worker (only on http/https protocols)
+  if ('serviceWorker' in navigator && ['http:', 'https:'].includes(window.location.protocol)) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
         .then(reg => {
