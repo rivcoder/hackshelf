@@ -421,6 +421,14 @@ window.addEventListener('online', () => {
   toast('Internet connection restored.');
 });
 
+// Link mobile tools buttons to existing desktop actions
+const mBmBtn = $('#mBmBtn');
+const mExpBtn = $('#mExpBtn');
+const mImpBtn = $('#mImpBtn');
+if (mBmBtn) mBmBtn.addEventListener('click', () => { if (bmDlg) bmDlg.showModal(); });
+if (mExpBtn) mExpBtn.addEventListener('click', exportData);
+if (mImpBtn) mImpBtn.addEventListener('click', () => { if (importFileInput) importFileInput.click(); });
+
 load().then(() => {
   // Bookmarklet support: app.html?url=...&name=... opens the form pre-filled
   const p = new URLSearchParams(location.search);

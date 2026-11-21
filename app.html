@@ -20,19 +20,19 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <div style="display:flex;align-items:center;gap:12px">
+    <div class="brand-wrap">
       <a class="logo" href="index.html"><img src="img/logo.png" alt="Hackshelf Logo" class="brand-icon">Hack<i>shelf</i></a>
       <a class="by-badge" href="https://kaushift.com" target="_blank" rel="noopener noreferrer" title="Visit Kaushift Community">by Kaushift ↗</a>
     </div>
     <div class="top-actions">
-      <div class="btn-group" role="toolbar" aria-label="Quick actions">
+      <div class="btn-group desktop-only" role="toolbar" aria-label="Quick actions">
         <button class="btn-icon" id="bookmarkletBtn" type="button" title="Capture from any browser page">Bookmarklet</button>
         <button class="btn-icon" id="installBtn" type="button" hidden title="Install Hackshelf app">Install</button>
         <button class="btn-icon" id="exportBtn" type="button" title="Export backup JSON">Export</button>
         <button class="btn-icon" id="importBtn" type="button" title="Import backup JSON">Import</button>
       </div>
       <input type="file" id="importFile" accept="application/json" style="display:none">
-      <button class="btn btn-primary-add" id="addBtn" type="button">+ Add hackathon</button>
+      <button class="btn btn-primary-add" id="addBtn" type="button"><span>+</span> Add hackathon</button>
     </div>
   </header>
 
@@ -56,7 +56,13 @@
       <ul class="list" id="archiveList"></ul>
     </details>
 
-    <div class="shortcuts-bar" aria-label="Keyboard shortcuts">
+    <div class="mobile-tools-bar mobile-only">
+      <button class="btn-tool-pill" id="mBmBtn" type="button">📌 Bookmarklet</button>
+      <button class="btn-tool-pill" id="mExpBtn" type="button">📥 Export</button>
+      <button class="btn-tool-pill" id="mImpBtn" type="button">📤 Import</button>
+    </div>
+
+    <div class="shortcuts-bar desktop-only" aria-label="Keyboard shortcuts">
       <span><kbd>/</kbd> Focus search</span>
       <span><kbd>N</kbd> Add hackathon</span>
       <span><kbd>Esc</kbd> Close dialog</span>
