@@ -102,6 +102,28 @@ p{text-wrap:pretty}
 .u-calm{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
 .u-past{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
 
+/* Brand Block with Subline */
+.brand-block{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.brand-block .logo{line-height:1}
+.by-subline{
+  font-size:.68rem;
+  font-weight:600;
+  letter-spacing:.03em;
+  color:var(--muted);
+  text-decoration:none;
+  margin-top:3px;
+  padding-left:42px; /* aligns directly underneath 'Hack shelf' text after 32px icon + 10px gap */
+  transition:color .25s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  opacity:.75;
+}
+.by-subline:hover{
+  color:var(--lit);
+  opacity:1;
+}
+
 /* navbar */
 .nav{position:sticky;top:0;z-index:100;border-bottom:1px solid transparent;transition:background .4s ease,border-color .4s ease}
 .nav.scrolled{background:rgba(20,10,9,.88);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom-color:var(--line)}
