@@ -61,6 +61,17 @@ if (demo && !rm && matchMedia('(hover: hover)').matches) {
   demo.addEventListener('pointerleave', () => { demo.style.transform = ''; });
 }
 
+/* tactile oxblood card glow on mouse hover */
+if (!rm && matchMedia('(hover: hover)').matches) {
+  document.querySelectorAll('.steps li, .feats li, .why li').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+}
+
 /* success cue (kept under its old name so app.js needs no change): a single ring expands from the element */
 window.hmConfetti = el => {
   if (rm) return;
