@@ -1,0 +1,19 @@
+{
+  "name": "Hackshelf: Hackathon Deadline Tracker",
+  "short_name": "Hackshelf",
+  "description": "Never miss a hackathon deadline again. Track Devfolio, Unstop, Devpost and MLH hackathons in one shelf.",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#150B08",
+  "theme_color": "#150B08",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "img/logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
