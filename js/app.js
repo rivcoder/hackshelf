@@ -178,10 +178,10 @@ function row(i) {
       url ? el('a', { class: 'name', href: url, target: '_blank', rel: 'noopener noreferrer' }, i.name) : el('span', { class: 'name' }, i.name),
       el('div', { class: 'meta' }, meta),
       (i.tags && i.tags.length) ? el('div', { class: 'tags' }, i.tags.map(t => el('span', { class: 'tag' }, t))) : null,
-      i.notes ? el('div', { class: 'meta' }, el('span', {}, i.notes)) : null),
+      i.notes ? el('blockquote', { class: 'notes-quote' }, i.notes) : null),
     el('div', { class: 'acts' }, sel,
-      el('button', { class: 'icon', type: 'button', onclick: () => openDialog(i) }, 'Edit'),
-      el('button', { class: 'icon', type: 'button', onclick: () => del(i) }, 'Delete')));
+      el('button', { class: 'icon-btn', type: 'button', onclick: () => openDialog(i), 'aria-label': 'Edit hackathon' }, '✏️ Edit'),
+      el('button', { class: 'icon-btn danger', type: 'button', onclick: () => del(i), 'aria-label': 'Delete hackathon' }, '🗑️ Delete')));
 }
 
 function render() {
