@@ -55,6 +55,7 @@ p{text-wrap:pretty}
 
 /* hero */
 .hero{position:relative;isolation:isolate;display:grid;gap:48px;align-items:center;min-height:calc(100svh - 70px);padding:40px 0 72px}
+.hero-stage-frame{width:100%;max-width:580px;aspect-ratio:5/4;border:none;border-radius:20px;box-shadow:0 30px 80px -20px rgba(0,0,0,.9);display:block}
 .hero::before{content:'';position:absolute;z-index:-2;inset:-80px -20vw auto auto;width:70vw;height:70vw;max-width:900px;max-height:900px;background:radial-gradient(closest-side,rgba(179,32,43,.32),transparent);animation:breathe 0s}
 .glow{position:absolute;z-index:-1;left:-320px;top:-320px;width:640px;height:640px;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(229,86,92,.2),transparent)}
 .hero h1{font-size:clamp(3.2rem,9vw,6.6rem);line-height:.96;letter-spacing:-.03em}
@@ -88,10 +89,10 @@ p{text-wrap:pretty}
 .feats li:hover{background:rgba(242,232,225,.03)}
 .why li{border-top-color:var(--line)}
 .why strong{font:500 1.75rem var(--display);letter-spacing:-.01em}
-.cta{background:radial-gradient(90% 150% at 50% 130%,#7A1822,#2A100E 70%);border:1px solid var(--line);border-radius:8px;padding:84px 24px;margin:24px 0 80px}
-.cta h2{font-size:clamp(2.2rem,5.4vw,3.8rem);max-width:18ch;margin:0 auto 32px}
-.cta .btn{background:var(--ink);color:var(--bg)}
-.cta .btn:hover{background:#fff;box-shadow:0 16px 40px -14px rgba(0,0,0,.7)}
+.cta{background:transparent;border:none;border-radius:0;padding:0;margin:24px 0 80px}
+.cta-frame{width:100%;max-width:1120px;height:520px;border:none;border-radius:16px;display:block;margin:0 auto}
+@media(max-width:760px){.cta-frame{height:400px}}
+@media(max-width:480px){.cta-frame{height:340px}}
 @media(min-width:800px){.what{grid-template-columns:1.15fr .85fr}.steps{gap:40px}.feats li{border-bottom:0;padding:36px 28px 42px}.feats li+li{border-left:1px solid var(--line)}.feats li:first-child{padding-left:0}.section{padding:120px 0}}
 .js [data-reveal]:not(.in){opacity:0}
 [data-reveal].in{animation:up 1.2s var(--ease) backwards;animation-delay:calc(var(--d,0)*120ms)}
