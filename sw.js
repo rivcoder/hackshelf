@@ -11,6 +11,7 @@ const ASSETS_TO_CACHE = [
   './js/fx.js',
   './js/config.js',
   './img/logo.png',
+  './privacy.html',
   './manifest.webmanifest'
 ];
 
