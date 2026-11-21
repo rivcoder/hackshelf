@@ -7,17 +7,18 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Lato:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Instrument+Sans:wght@600&display=swap">
 <style>
-/* Layout: full screen centered banner. Headline, button, nothing else. Soft wine glow at the base. */
+/* Layout: a closing section that belongs to the Hackshelf page. Same wine-black ground, hairline rule on top, oxblood button, rose accent. The red glow rises from the base and fades out, so the section has no hard edges. Single dark look, chosen on purpose. */
 :root {
-  --bg: #120908;
-  --ink: #f6ece6;
-  --accent: #d9c4a0;
-  --btn: #f3e9e3;
-  --btn-ink: #1a0f0e;
+  --bg: #170e0d;
+  --ink: #f3e9e4;
+  --hair: rgba(255, 235, 225, 0.1);
+  --rose: #cd5a5e;
+  --red-a: #b53c40;
+  --red-b: #952f33;
   --display: "Cormorant Garamond", Georgia, serif;
-  --text: "Lato", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: dark;
 }
 
@@ -33,81 +34,62 @@ body {
   display: flex; flex-direction: column; align-items: stretch; justify-content: stretch;
 }
 
-.banner {
-  position: relative; overflow: hidden; isolation: isolate;
+.cta {
+  position: relative; isolation: isolate; container-type: inline-size;
+  border-top: 1px solid var(--hair);
   width: 100%; height: 100%; min-height: 100vh; margin: 0;
-  border: none; border-radius: 0;
-  background: #150b0a;
   display: flex; align-items: center; justify-content: center;
 }
 
-/* soft mesh gradient: wine, rose and amber, blurred into one smooth field */
-.banner::before {
-  content: ""; position: absolute; inset: -30%; z-index: -1; pointer-events: none; filter: blur(60px);
-  background:
-    radial-gradient(46% 52% at 50% 108%, rgba(112, 28, 38, 0.95) 0%, rgba(112, 28, 38, 0) 100%),
-    radial-gradient(34% 46% at 14% 92%, rgba(84, 22, 32, 0.8) 0%, rgba(84, 22, 32, 0) 100%),
-    radial-gradient(34% 46% at 86% 92%, rgba(84, 22, 32, 0.8) 0%, rgba(84, 22, 32, 0) 100%),
-    radial-gradient(40% 40% at 50% -6%, rgba(58, 18, 26, 0.7) 0%, rgba(58, 18, 26, 0) 100%);
-}
-
-/* keeps the headline area calm and readable */
-.banner::after {
+/* low red glow, fading into the page on every side */
+.cta::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: radial-gradient(60% 55% at 50% 46%, rgba(21, 11, 10, 0.72) 0%, rgba(21, 11, 10, 0) 100%);
+  background:
+    radial-gradient(56% 78% at 50% 112%, rgba(150, 38, 44, 0.62) 0%, rgba(150, 38, 44, 0) 100%),
+    radial-gradient(34% 50% at 50% 100%, rgba(190, 62, 66, 0.22) 0%, rgba(190, 62, 66, 0) 100%);
 }
 
 .inner {
-  position: relative; display: flex; flex-direction: column; align-items: center; text-align: center;
-  gap: clamp(28px, 4vw, 48px); padding: clamp(40px, 8vw, 80px) 24px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: clamp(28px, 4cqw, 48px); padding: clamp(40px, 8vw, 80px) 24px;
   max-width: 1120px; width: 100%; margin: 0 auto;
 }
 
 h1 {
-  margin: 0; font: 500 clamp(36px, 7vw, 76px) / 1.08 var(--display); letter-spacing: -0.005em;
+  margin: 0; font: 500 clamp(34px, 5.9cqw, 68px) / 1.08 var(--display); letter-spacing: -0.005em;
   transition: opacity 0.7s ease, filter 0.7s ease;
 }
 h1.gone { opacity: 0; filter: blur(6px); }
-.line { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 0.22em; }
+.line { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 0.2em; }
 .w { display: inline-block; white-space: nowrap; }
 .ch { position: relative; }
 .ch.hide { opacity: 0; }
-.ch.cur::after { content: ""; position: absolute; right: -0.07em; top: 0.14em; bottom: 0.08em; width: 0.04em; background: var(--accent); }
-.acc { font-style: italic; color: var(--accent); }
-.acc .ch {
-  background: linear-gradient(100deg, #ead9bd 0%, #cdb185 45%, #ead9bd 100%);
-  background-size: 220% 100%; -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent; color: transparent;
-}
+.ch.cur::after { content: ""; position: absolute; right: -0.07em; top: 0.14em; bottom: 0.08em; width: 0.04em; background: var(--rose); }
+.acc { font-style: italic; color: var(--rose); }
 
+/* same button as the hero's "Try it now" */
 .btn {
   display: inline-block; text-decoration: none; cursor: pointer;
-  background: var(--btn); color: var(--btn-ink); font: 700 16px / 1 var(--text);
-  padding: 18px 36px; border-radius: 9999px;
-  box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.6);
-  transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  background: linear-gradient(180deg, var(--red-a), var(--red-b)); color: #fbeee9;
+  font: 600 18px / 1 var(--text); padding: 18px 36px; border-radius: 9999px;
+  box-shadow: 0 10px 30px rgba(150, 38, 44, 0.35);
+  transition: filter 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
-.btn:hover { background: #fff; box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5); transform: translateY(-2px); }
-.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.btn:hover { filter: brightness(1.1); box-shadow: 0 14px 38px rgba(170, 44, 50, 0.5); transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: no-preference) {
   .ch.cur::after { animation: blink 1s steps(1) infinite; }
-  .banner::before { animation: mesh 26s ease-in-out infinite alternate; }
-  .acc .ch { animation: hue 8s ease-in-out infinite alternate; }
   .btn { animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both; }
 }
 @keyframes blink { 50% { opacity: 0; } }
-@keyframes mesh {
-  from { transform: translate3d(-3%, 2%, 0) rotate(-3deg) scale(1); }
-  to { transform: translate3d(3%, -2%, 0) rotate(3deg) scale(1.08); }
-}
-@keyframes hue { from { background-position: 0% 0; } to { background-position: 100% 0; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } }
 </style>
 </head>
 <body>
 
-<section class="banner" aria-labelledby="cta-title">
+<section class="cta" aria-labelledby="cta-title">
   <div class="inner">
     <h1 id="cta-title" aria-label="Your next deadline is already out there.">
       <span class="line"><span class="w">Your</span><span class="w">next</span><span class="w">deadline</span></span>
