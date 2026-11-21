@@ -1,8 +1,10 @@
-const CACHE_NAME = 'hackshelf-v1';
+const CACHE_NAME = 'hackshelf-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './app.html',
+  './hero-loop.html',
+  './cta-live.html',
   './css/style.css',
   './css/app.css',
   './css/lux.css',

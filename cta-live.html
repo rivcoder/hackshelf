@@ -28,15 +28,18 @@
 body {
   margin: 0; background: transparent; color: var(--ink); font: 14px/1.4 var(--text);
   padding: 0; overflow: hidden;
+  height: 100vh; width: 100vw;
+  display: flex; align-items: stretch; justify-content: stretch;
 }
 
 .banner {
   --mx: 0; --my: 0;
-  position: relative; width: 100%; max-width: 1120px; margin-inline: auto; overflow: hidden; isolation: isolate;
-  container-type: inline-size; border-radius: 16px;
-  box-shadow: 0 0 0 1px rgba(255, 235, 225, 0.05), 0 40px 90px rgba(0, 0, 0, 0.55);
+  position: relative; width: 100%; max-width: none; margin: 0; overflow: hidden; isolation: isolate;
+  container-type: inline-size; border-radius: 0;
+  box-shadow: none;
   background: radial-gradient(130% 100% at 50% 0%, #2d1615 0%, #1b0e0d 55%, #130a09 100%);
   box-sizing: border-box;
+  display: flex; flex-direction: column; justify-content: center;
 }
 
 /* animated hairline border */
