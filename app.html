@@ -90,7 +90,12 @@
     <h2 id="dlgTitle">Add hackathon</h2>
     <label class="fld">Link
       <input name="url" type="url" inputmode="url" placeholder="Paste the hackathon link">
-      <span class="err" data-for="url"></span></label>
+      <span class="err" data-for="url"></span>
+      <div class="autofill-stage">
+        <canvas id="autofillCanvas" class="autofill-canvas"></canvas>
+        <div id="autofillNotice" class="autofill-notice" style="display:none"></div>
+      </div>
+    </label>
     <label class="fld">Name
       <input name="name" required maxlength="120"><span class="err" data-for="name"></span></label>
     <div class="two">
@@ -111,8 +116,11 @@
       <input name="team_chat" type="url" placeholder="WhatsApp or Discord link"><span class="err" data-for="team_chat"></span></label>
     <label class="fld">Notes <textarea name="notes" rows="3" maxlength="500"></textarea></label>
     <div class="dlg-acts">
-      <button class="btn ghost" type="button" id="cancel">Cancel</button>
-      <button class="btn" type="submit">Save</button>
+      <div id="formGlobalErr" class="form-global-err"></div>
+      <div class="dlg-acts-btns">
+        <button class="btn ghost" type="button" id="cancel">Cancel</button>
+        <button class="btn" type="submit">Save</button>
+      </div>
     </div>
   </form>
 </dialog>

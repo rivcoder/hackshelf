@@ -71,6 +71,79 @@ a.name:hover{color:var(--lit);text-decoration:underline}
 .u-gold{background:rgba(217,119,6,0.18);color:#FBBF24;border:1px solid rgba(251,191,36,.3)}
 .u-calm{background:rgba(242,232,225,.03);color:var(--muted);border:1px solid rgba(242,232,225,.06)}
 .u-past{background:transparent;color:var(--muted);border:1px dashed rgba(242,232,225,.08)}
+/* Autofill Pixel Stage */
+.autofill-stage{
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-top:10px;
+  min-height:38px;
+  width:100%;
+}
+.autofill-canvas{
+  position:absolute;
+  inset:-40px -40px;
+  width:calc(100% + 80px);
+  height:calc(100% + 80px);
+  pointer-events:none;
+  z-index:10;
+}
+
+/* Autofill Notice Luxury Liquid Badge */
+.autofill-notice{
+  position:relative;
+  font-size:.84rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  color:#FFF0EB;
+  display:none;
+  align-items:center;
+  gap:7px;
+  background:linear-gradient(135deg, rgba(229,86,92,.3) 0%, rgba(138,21,30,.24) 100%);
+  border:1px solid rgba(229,86,92,.5);
+  box-shadow:0 0 25px -4px rgba(229,86,92,.5), 0 8px 24px -6px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.3);
+  border-radius:9999px;
+  padding:7px 18px;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  overflow:hidden;
+  z-index:5;
+  transition:opacity .3s ease, transform .3s ease;
+}
+
+.autofill-notice.pixel-forming{
+  display:inline-flex;
+  opacity:0;
+  transform:scale(.6);
+}
+
+.autofill-notice.pixel-solid{
+  display:inline-flex;
+  opacity:1;
+  transform:scale(1);
+  animation:badgeGleam 2s ease infinite;
+}
+
+.autofill-notice.pixel-bursting{
+  display:inline-flex;
+  opacity:0;
+  transform:scale(1.2);
+  transition:all .25s cubic-bezier(.16,1,.3,1);
+}
+
+@keyframes badgeGleam{
+  0%,100%{box-shadow:0 0 25px -4px rgba(229,86,92,.5), 0 8px 24px -6px rgba(0,0,0,.7)}
+  50%{box-shadow:0 0 35px -2px rgba(229,86,92,.75), 0 8px 24px -6px rgba(0,0,0,.7)}
+}
+
+/* Calendar dropdown actions */
+.cal-dropdown{position:relative;display:inline-block}
+.cal-menu{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#1a0e0b;border:1px solid rgba(242,232,225,.1);border-radius:12px;padding:6px;z-index:30;box-shadow:0 12px 30px -8px rgba(0,0,0,.8);min-width:160px;flex-direction:column;gap:2px}
+.cal-menu.show{display:flex;animation:fadeUp .2s ease}
+.cal-item{background:transparent;border:0;color:var(--muted);font:500 .8rem var(--body);padding:8px 12px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;text-decoration:none;transition:all .2s;text-align:left;width:100%}
+.cal-item:hover{background:rgba(242,232,225,.07);color:var(--ink)}
+
 .acts{display:flex;gap:10px;align-items:center}
 .acts select{font:inherit;border:1px solid rgba(242,232,225,.1);border-radius:9999px;padding:9px 34px 9px 14px;background:rgba(242,232,225,.04);color:var(--ink);font-weight:500;font-size:.86rem;cursor:pointer;transition:all .2s}
 .acts select:hover{background:rgba(242,232,225,.07);border-color:rgba(242,232,225,.2)}
@@ -93,8 +166,12 @@ dialog h2{font-size:1.8rem;margin-bottom:20px;font-family:var(--display);font-we
 .form-section-title{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
 .fld{display:grid;gap:6px;margin-bottom:14px;font-weight:500;font-size:.88rem;color:var(--ink)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.err{color:var(--lit);font-size:.82rem;min-height:1em}
-.dlg-acts{display:flex;gap:12px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid rgba(242,232,225,.06)}
+.err{display:none} /* Hide awkward in-between field error spaces */
+.input-err{border-color:rgba(229,86,92,.8)!important;background:rgba(229,86,92,.06)!important;box-shadow:0 0 0 2px rgba(229,86,92,.25)!important}
+.dlg-acts{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid rgba(242,232,225,.06);flex-wrap:wrap}
+.dlg-acts-btns{display:flex;gap:10px;align-items:center;margin-left:auto}
+.form-global-err{color:#E5565C;font-size:.85rem;font-weight:500;display:none;align-items:center;gap:6px;animation:fadeUp .2s ease}
+.form-global-err.show{display:inline-flex}
 .quick{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 16px}
 .quick button{background:rgba(242,232,225,.03);color:var(--muted);border:1px solid rgba(242,232,225,.06);border-radius:9999px;padding:6px 14px;font:500 .82rem var(--body);cursor:pointer;transition:all .25s var(--ease)}
 .quick button:hover{border-color:rgba(229,86,92,.4);color:var(--ink);background:rgba(229,86,92,.08)}

@@ -104,6 +104,87 @@ const platformFromUrl = s => {
   const h = (safeUrl(s) || '').toLowerCase();
   return h.includes('devfolio') ? 'Devfolio' : h.includes('unstop') ? 'Unstop' : h.includes('devpost') ? 'Devpost' : h.includes('mlh.io') ? 'MLH' : 'Other';
 };
+
+/* Smart Title Extractor from Hackathon URLs */
+const titleFromUrl = s => {
+  try {
+    const u = new URL(safeUrl(s) || s);
+    const host = u.hostname.toLowerCase();
+    let slug = '';
+    if (host.includes('devfolio.co')) {
+      const sub = host.split('.')[0];
+      if (sub && sub !== 'devfolio' && sub !== 'www') slug = sub;
+      else slug = u.pathname.split('/').filter(Boolean)[0] || '';
+    } else if (host.includes('devpost.com')) {
+      const sub = host.split('.')[0];
+      if (sub && sub !== 'devpost' && sub !== 'www') slug = sub;
+      else slug = u.pathname.split('/').filter(Boolean)[0] || '';
+    } else if (host.includes('unstop.com')) {
+      const parts = u.pathname.split('/').filter(Boolean);
+      slug = parts[parts.length - 1] || '';
+    } else {
+      const parts = u.pathname.split('/').filter(Boolean);
+      slug = parts[parts.length - 1] || '';
+    }
+    if (!slug) return '';
+    // Format slug: "eth-mumbai-2025" -> "ETH Mumbai 2025"
+    return slug
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b([a-z])/g, (_, c) => c.toUpperCase())
+      .replace(/\bEth\b/gi, 'ETH')
+      .replace(/\bAi\b/gi, 'AI')
+      .replace(/\bMlh\b/gi, 'MLH')
+      .trim();
+  } catch {
+    return '';
+  }
+};
+
+/* Calendar Event URL & ICS Generators */
+const makeGoogleCalUrl = i => {
+  if (!i.deadline) return '#';
+  const cleanDate = i.deadline.replace(/-/g, '');
+  const title = encodeURIComponent(`${i.name} — Hackathon Deadline`);
+  const details = encodeURIComponent(
+    `Hackathon Deadline for ${i.name}\n` +
+    (i.url ? `URL: ${i.url}\n` : '') +
+    (i.team_members ? `Team: ${i.team_members}\n` : '') +
+    (i.team_chat ? `Team Chat: ${i.team_chat}\n` : '') +
+    (i.notes ? `Notes: ${i.notes}\n` : '') +
+    `Tracked with Hackshelf (https://hackshelf.vercel.app)`
+  );
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${cleanDate}/${cleanDate}&details=${details}`;
+};
+
+const downloadIcs = i => {
+  if (!i.deadline) return;
+  const cleanDate = i.deadline.replace(/-/g, '');
+  const icsData = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Hackshelf//Deadline Tracker//EN',
+    'BEGIN:VEVENT',
+    `UID:hs-${i.id || Date.now()}@hackshelf.vercel.app`,
+    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+    `DTSTART;VALUE=DATE:${cleanDate}`,
+    `DTEND;VALUE=DATE:${cleanDate}`,
+    `SUMMARY:${i.name.replace(/[,;]/g, ' ')} — Hackathon Deadline`,
+    `DESCRIPTION:${(i.url || '')} ${i.notes ? '\\n' + i.notes.replace(/[\r\n]+/g, ' ') : ''}`,
+    (i.url ? `URL:${i.url}` : ''),
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].filter(Boolean).join('\r\n');
+
+  const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${i.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_deadline.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+};
 const daysLeft = ymd => {
   const [y, m, d] = ymd.split('-').map(Number);
   const now = new Date();
@@ -172,6 +253,22 @@ function row(i) {
     }
   }, STATUSES.map(([v, l]) => el('option', { value: v, selected: i.status === v ? '' : null }, l)));
 
+  const calMenu = el('div', { class: 'cal-menu' },
+    el('a', { class: 'cal-item', href: makeGoogleCalUrl(i), target: '_blank', rel: 'noopener noreferrer' }, '📅 Google Calendar'),
+    el('button', { class: 'cal-item', type: 'button', onclick: () => downloadIcs(i) }, '📥 Apple / Outlook (.ics)')
+  );
+  const calBtn = el('button', {
+    class: 'icon-btn',
+    type: 'button',
+    'aria-label': 'Add deadline to calendar',
+    onclick: e => {
+      e.stopPropagation();
+      document.querySelectorAll('.cal-menu.show').forEach(m => { if (m !== calMenu) m.classList.remove('show'); });
+      calMenu.classList.toggle('show');
+    }
+  }, '📅');
+  const calWrap = el('div', { class: 'cal-dropdown' }, calBtn, calMenu);
+
   return el('li', { class: 'row' + (d < 0 ? ' past' : '') },
     el('div', { class: 'count ' + cls }, el('b', {}, d === 0 ? '0' : String(num)), el('span', {}, unit)),
     el('div', { class: 'main' },
@@ -179,7 +276,7 @@ function row(i) {
       el('div', { class: 'meta' }, meta),
       (i.tags && i.tags.length) ? el('div', { class: 'tags' }, i.tags.map(t => el('span', { class: 'tag' }, t))) : null,
       i.notes ? el('blockquote', { class: 'notes-quote' }, i.notes) : null),
-    el('div', { class: 'acts' }, sel,
+    el('div', { class: 'acts' }, sel, calWrap,
       el('button', { class: 'icon-btn', type: 'button', onclick: () => openDialog(i), 'aria-label': 'Edit hackathon' }, '✏️ Edit'),
       el('button', { class: 'icon-btn danger', type: 'button', onclick: () => del(i), 'aria-label': 'Delete hackathon' }, '🗑️ Delete')));
 }
@@ -246,32 +343,203 @@ const dlg = $('#dlg'), form = $('#form');
 function openDialog(item, prefill = {}) {
   state.editing = item ? item.id : null;
   form.reset();
-  form.querySelectorAll('.err').forEach(e => e.textContent = '');
+  form.querySelectorAll('.input-err').forEach(el => el.classList.remove('input-err'));
+  const globalErr = $('#formGlobalErr');
+  if (globalErr) { globalErr.textContent = ''; globalErr.classList.remove('show'); }
   $('#dlgTitle').textContent = item ? 'Edit hackathon' : 'Add hackathon';
   const v = item ? { ...item, tags: (item.tags || []).join(', ') } : { status: 'interested', platform: 'Other', ...prefill };
   for (const [k, val] of Object.entries(v)) {
     if (form.elements[k] && val != null) form.elements[k].value = val;
   }
+  const autofillNotice = $('#autofillNotice');
+  if (autofillNotice) autofillNotice.style.display = 'none';
   dlg.showModal();
   if (!item) form.elements.url.focus();
 }
 
+let noticeTimer = null;
+let pixelAnimRaf = null;
+
+function triggerAutofillNotice(text) {
+  const notice = $('#autofillNotice');
+  const canvas = $('#autofillCanvas');
+  if (!notice || !canvas) return;
+  
+  clearTimeout(noticeTimer);
+  if (pixelAnimRaf) cancelAnimationFrame(pixelAnimRaf);
+  
+  notice.textContent = text;
+  notice.className = 'autofill-notice pixel-forming';
+  notice.style.display = 'inline-flex';
+
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const colors = ['#FF4E59', '#E5565C', '#FFA1A6', '#FFD1D4', '#ffffff'];
+
+  // 1. Pixel Implosion: Pixels collect inward from outside
+  const count = 48;
+  const pixels = [];
+  for (let k = 0; k < count; k++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 70 + Math.random() * 90;
+    pixels.push({
+      x: cx + Math.cos(angle) * dist,
+      y: cy + Math.sin(angle) * dist,
+      tx: cx + (Math.random() - 0.5) * 80,
+      ty: cy + (Math.random() - 0.5) * 20,
+      size: 2.5 + Math.random() * 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1,
+      speed: 0.08 + Math.random() * 0.04
+    });
+  }
+
+  let startTime = performance.now();
+  function implosionStep(now) {
+    const elapsed = now - startTime;
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    let done = true;
+
+    pixels.forEach(p => {
+      p.x += (p.tx - p.x) * p.speed;
+      p.y += (p.ty - p.y) * p.speed;
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.min(1, elapsed / 200);
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+      if (Math.hypot(p.tx - p.x, p.ty - p.y) > 2) done = false;
+    });
+
+    if (!done && elapsed < 650) {
+      pixelAnimRaf = requestAnimationFrame(implosionStep);
+    } else {
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      notice.className = 'autofill-notice pixel-solid';
+
+      // 2. Holds solid for 6 seconds
+      noticeTimer = setTimeout(() => {
+        // 3. Pixel Burst Out
+        notice.className = 'autofill-notice pixel-bursting';
+        burstPixels();
+      }, 6000);
+    }
+  }
+
+  function burstPixels() {
+    const burstParticles = [];
+    for (let k = 0; k < 64; k++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2.5 + Math.random() * 5.5;
+      burstParticles.push({
+        x: cx + (Math.random() - 0.5) * 70,
+        y: cy + (Math.random() - 0.5) * 16,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 2.5 + Math.random() * 3.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: 1,
+        life: 1
+      });
+    }
+
+    function burstStep() {
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      let alive = false;
+      burstParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.94;
+        p.vy *= 0.94;
+        p.life -= 0.035;
+        if (p.life > 0) {
+          alive = true;
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, p.life);
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+        }
+      });
+
+      if (alive) {
+        pixelAnimRaf = requestAnimationFrame(burstStep);
+      } else {
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        notice.style.display = 'none';
+        notice.className = 'autofill-notice';
+      }
+    }
+    pixelAnimRaf = requestAnimationFrame(burstStep);
+  }
+
+  pixelAnimRaf = requestAnimationFrame(implosionStep);
+}
+
 form.elements.url.addEventListener('input', e => {
-  if (!state.editing) form.elements.platform.value = platformFromUrl(e.target.value);
+  const urlVal = e.target.value.trim();
+  const notice = $('#autofillNotice');
+  if (!urlVal) {
+    if (notice) { notice.style.display = 'none'; notice.className = 'autofill-notice'; }
+    clearTimeout(noticeTimer);
+    return;
+  }
+  if (!state.editing) {
+    const plat = platformFromUrl(urlVal);
+    if (plat && plat !== 'Other') form.elements.platform.value = plat;
+    
+    // Auto-fill title if currently blank
+    if (!form.elements.name.value.trim()) {
+      const autoTitle = titleFromUrl(urlVal);
+      if (autoTitle) {
+        form.elements.name.value = autoTitle;
+        triggerAutofillNotice('got the name for ya my bbg 😗🎀');
+      } else if (plat !== 'Other') {
+        triggerAutofillNotice('got the platform for ya my bbg 😗🎀');
+      }
+    }
+  }
 });
 $('#cancel').addEventListener('click', () => dlg.close());
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(form));
-  const errs = {};
+  form.querySelectorAll('.input-err').forEach(el => el.classList.remove('input-err'));
+  const globalErr = $('#formGlobalErr');
+  if (globalErr) { globalErr.textContent = ''; globalErr.classList.remove('show'); }
+
+  const errs = [];
   const name = (f.name || '').trim();
-  if (!name) errs.name = 'Enter the hackathon name.';
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(f.deadline || '')) errs.deadline = 'Pick the deadline date.';
-  if (f.url && !safeUrl(f.url.trim())) errs.url = 'This is not a valid link.';
-  if (f.team_chat && !safeUrl(f.team_chat.trim())) errs.team_chat = 'This is not a valid link.';
-  form.querySelectorAll('.err').forEach(s => s.textContent = errs[s.dataset.for] || '');
-  if (Object.keys(errs).length) return;
+  if (!name) {
+    errs.push('drop the hackathon name first dummie 😗');
+    form.elements.name.classList.add('input-err');
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(f.deadline || '')) {
+    errs.push('pick the deadline date so we don\'t miss it bro 📅');
+    form.elements.deadline.classList.add('input-err');
+  }
+  if (f.url && !safeUrl(f.url.trim())) {
+    errs.push('that hackathon link looks a bit broken 🥲🧷');
+    form.elements.url.classList.add('input-err');
+  }
+  if (f.team_chat && !safeUrl(f.team_chat.trim())) {
+    errs.push('check that chat link again cutie 💬');
+    form.elements.team_chat.classList.add('input-err');
+  }
+
+  if (errs.length) {
+    if (globalErr) {
+      globalErr.textContent = errs[0];
+      globalErr.classList.add('show');
+    }
+    const firstInvalid = form.querySelector('.input-err');
+    if (firstInvalid) firstInvalid.focus();
+    return;
+  }
 
   const tags = [...new Set(String(f.tags || '').split(',').map(t => t.trim()).filter(Boolean))].slice(0, 6);
   const data = {
@@ -292,7 +560,7 @@ form.addEventListener('submit', async e => {
     else await store.add(data);
     const wasNew = !state.editing;
     dlg.close();
-    toast(wasNew ? 'Hackathon saved to shelf' : 'Changes saved');
+    toast(wasNew ? 'on your shelf now 🔖' : 'updated for ya 💅');
     if (wasNew && window.hmConfetti) window.hmConfetti();
     await load();
   } catch (err) {
@@ -411,6 +679,11 @@ document.addEventListener('keydown', e => {
   if (dlg.open || e.metaKey || e.ctrlKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
   if (e.key === '/') { e.preventDefault(); $('#q').focus(); }
   else if (e.key === 'n') { e.preventDefault(); openDialog(); }
+});
+
+// Close any open calendar dropdowns when clicking outside
+document.addEventListener('click', () => {
+  document.querySelectorAll('.cal-menu.show').forEach(m => m.classList.remove('show'));
 });
 
 // Network status listeners
